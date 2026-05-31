@@ -1,0 +1,10 @@
+{
+  "threshold": 0.15,
+  "prompts": [
+    "a cross recessed screw",
+    "a Phillips head screw",
+    "a metal fastener",
+    "a screw embedded in hardware"
+  ],
+  "calibration_mae": 0.0
+}

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScREW COUNTER — CDIA Residência IA</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⚙</span>
+      <div>
+        <div class="logo-title">SCREW COUNTER</div>
+        <div class="logo-sub">CDIA · Residência em IA · Desafio 1</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-green">OpenCV</span>
+      <span class="badge badge-blue">PyTorch</span>
+      <span class="badge badge-purple">Scipy</span>
+      <span class="badge badge-orange">FastAPI</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Tab bar ── -->
+  <div class="tab-bar">
+    <button class="tab active" data-tab="single">Análise Individual</button>
+    <button class="tab" data-tab="compare">Comparar Métodos</button>
+    <button class="tab" data-tab="catalog">Catálogo de Hardware</button>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       TAB: ANÁLISE INDIVIDUAL
+       ════════════════════════════════════════ -->
+  <div id="tab-single" class="tab-content active">
+    <div class="panel-grid">
+
+      <!-- Upload -->
+      <div class="panel">
+        <div class="panel-title">📤 Imagem</div>
+
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-placeholder" id="dropPlaceholder">
+            <div class="drop-icon">🔩</div>
+            <p>Arraste uma imagem aqui<br>ou <span class="link">clique para selecionar</span></p>
+            <p class="drop-hint">JPG · PNG · WEBP</p>
+          </div>
+          <img id="previewImg" class="hidden" alt="preview" />
+          <input type="file" id="fileInput" accept="image/*" />
+        </div>
+
+        <div class="method-row">
+          <div class="method-group">
+            <label class="form-label">Método</label>
+            <select id="methodSelect" class="select">
+              <optgroup label="📱 Tier 1 — Smartphone">
+                <option value="WS_RegionalMax" selected>WS Regional Max ⭐ 5/5</option>
+                <option value="Watershed">Watershed  4/5</option>
+                <option value="ConvexDefects">Convex Defects  3/5</option>
+                <option value="ColorBG_Sub">Color BG Sub  2/5</option>
+                <option value="HoughCircles">Hough Circles  1/5</option>
+                <option value="SimpleBlobDet">Simple Blob Det  1/5</option>
+              </optgroup>
+              <optgroup label="💻 Tier 2 — CPU (Notebook)">
+                <option value="NCC_Template">NCC Template  1/5</option>
+                <option value="LoG_Blobs">LoG Scale-Space  0/5</option>
+                <option value="MobileNet_CNN">MobileNet CNN  0/5</option>
+              </optgroup>
+              <optgroup label="🖥️ Tier 3 — GPU (a testar)">
+                <option value="OwlViT">OwlViT (zero-shot)</option>
+                <option value="CLIP_Count">CLIP Counting</option>
+              </optgroup>
+              <optgroup label="☁️ Tier 4 — Cloud">
+                <option value="VLM_Claude">VLM Claude API</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="hw-pill" id="hwPill">
+            <span id="hwIcon">📱</span>
+            <span id="hwLabel">Smartphone</span>
+          </div>
+        </div>
+
+        <div class="hw-bar" id="hwBar">
+          <div class="hw-detail"><span class="hw-key">RAM</span><span id="hwRam">~50 MB</span></div>
+          <div class="hw-detail"><span class="hw-key">Disco</span><span id="hwDisk">0 MB</span></div>
+          <div class="hw-detail"><span class="hw-key">GPU</span><span id="hwGpu">Não</span></div>
+          <div class="hw-detail"><span class="hw-key">Offline</span><span id="hwOffline">✓</span></div>
+        </div>
+
+        <button id="countBtn" class="btn btn-primary" disabled>
+          <span class="btn-icon">⚙</span> Contar Parafusos
+        </button>
+      </div>
+
+      <!-- Result -->
+      <div class="panel result-panel">
+        <div class="panel-title">📊 Resultado</div>
+
+        <div class="result-empty" id="resultEmpty">
+          <div class="result-empty-icon">📷</div>
+          <p>Envie uma imagem para começar</p>
+        </div>
+
+        <div class="result-content hidden" id="resultContent">
+          <div class="count-display">
+            <div class="count-number" id="countNumber">0</div>
+            <div class="count-unit">parafusos detectados</div>
+          </div>
+
+          <div class="result-meta">
+            <div class="meta-chip" id="metaMethod">—</div>
+            <div class="meta-chip time-chip" id="metaTime">— ms</div>
+          </div>
+
+          <div class="annotated-wrap">
+            <img id="annotatedImg" src="" alt="Resultado anotado" />
+          </div>
+
+          <button class="btn btn-secondary" id="downloadBtn">
+            ⬇ Baixar Imagem Anotada
+          </button>
+        </div>
+
+        <div class="loading hidden" id="loadingOverlay">
+          <div class="spinner"></div>
+          <p>Processando…</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       TAB: COMPARAR MÉTODOS
+       ════════════════════════════════════════ -->
+  <div id="tab-compare" class="tab-content hidden">
+    <div class="panel">
+      <div class="panel-title">⚖️ Comparação de Métodos (Tier 1 + 2)</div>
+      <p class="panel-desc">Roda todos os métodos CV simultaneamente na imagem enviada.</p>
+
+      <div class="compare-upload-row">
+        <div class="drop-zone drop-zone-sm" id="dropZoneCompare">
+          <div class="drop-placeholder" id="dropPlaceholderCompare">
+            <div class="drop-icon">🔩</div>
+            <p>Selecione uma imagem</p>
+          </div>
+          <img id="previewCompare" class="hidden" alt="preview compare" />
+          <input type="file" id="fileInputCompare" accept="image/*" />
+        </div>
+        <button id="compareBtn" class="btn btn-primary" disabled>
+          <span class="btn-icon">⚡</span> Comparar Todos
+        </button>
+      </div>
+
+      <div class="loading hidden" id="compareLoading">
+        <div class="spinner"></div>
+        <p>Rodando todos os métodos…</p>
+      </div>
+
+      <div id="compareGrid" class="compare-grid hidden"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       TAB: CATÁLOGO DE HARDWARE
+       ════════════════════════════════════════ -->
+  <div id="tab-catalog" class="tab-content hidden">
+    <div class="panel">
+      <div class="panel-title">🖥️ Catálogo de Hardware — Requisitos por Método</div>
+      <p class="panel-desc">
+        13 métodos testados organizados por requisito de hardware. A restrição computacional
+        é um critério de projeto real para dispositivos embarcados no processo de picking.
+      </p>
+
+      <div class="tier-section">
+        <div class="tier-header tier-1">📱 Tier 1 — Smartphone / Dispositivo Embarcado</div>
+        <div class="tier-desc">Sem GPU · &lt;100 MB RAM · offline · &lt;100ms</div>
+        <table class="hw-table">
+          <thead><tr><th>Método</th><th>Acertos</th><th>MAE</th><th>Tempo</th><th>RAM</th><th>Tipo</th></tr></thead>
+          <tbody>
+            <tr class="winner"><td>WS Regional Max ⭐</td><td class="acc">5/5</td><td>0.00</td><td>8 ms</td><td>~50 MB</td><td>Adaptive Watershed</td></tr>
+            <tr><td>Watershed</td><td class="acc">4/5</td><td>0.60</td><td>12 ms</td><td>~50 MB</td><td>Classic Watershed</td></tr>
+            <tr><td>Convex Defects</td><td class="acc">3/5</td><td>0.60</td><td>3 ms</td><td>~10 MB</td><td>Geometric</td></tr>
+            <tr><td>Color BG Sub</td><td class="acc acc-med">2/5</td><td>1.60</td><td>12 ms</td><td>~50 MB</td><td>Background Model</td></tr>
+            <tr><td>Simple Blob Det</td><td class="acc acc-low">1/5</td><td>2.60</td><td>5 ms</td><td>~20 MB</td><td>Blob Detection</td></tr>
+            <tr><td>Hough Circles</td><td class="acc acc-low">1/5</td><td>8.60</td><td>8 ms</td><td>~20 MB</td><td>Hough Transform</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tier-section">
+        <div class="tier-header tier-2">💻 Tier 2 — Notebook / Servidor CPU</div>
+        <div class="tier-desc">Sem GPU obrigatória · &gt;50 MB RAM/disco · &gt;100ms</div>
+        <table class="hw-table">
+          <thead><tr><th>Método</th><th>Acertos</th><th>MAE</th><th>Tempo</th><th>RAM+Disco</th><th>Tipo</th></tr></thead>
+          <tbody>
+            <tr><td>NCC Template</td><td class="acc acc-low">1/5</td><td>3.40</td><td>135 ms</td><td>~80 MB</td><td>Template Matching</td></tr>
+            <tr><td>SIFT Template</td><td class="acc acc-bad">0/5</td><td>4.80</td><td>48 ms</td><td>~80 MB</td><td>Feature Matching</td></tr>
+            <tr><td>LoG Blobs</td><td class="acc acc-bad">0/5</td><td>5.00</td><td>1600 ms</td><td>~100 MB</td><td>Scale-Space</td></tr>
+            <tr><td>MobileNet CNN</td><td class="acc acc-bad">0/5</td><td>6.20</td><td>1080 ms</td><td>~200 MB + 14 MB</td><td>Deep Feature Salience</td></tr>
+            <tr><td>GrabCut</td><td class="acc acc-bad">0/5</td><td>4.60</td><td>4670 ms</td><td>~100 MB</td><td>Iterative GMM</td></tr>
+            <tr><td>Canny Contour</td><td class="acc acc-bad">0/5</td><td>4.00</td><td>2 ms</td><td>~20 MB</td><td>Edge Detection</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tier-section">
+        <div class="tier-header tier-3">🖥️ Tier 3 — GPU Recomendada (a testar)</div>
+        <div class="tier-desc">GPU &gt;4 GB VRAM · &gt;1 GB RAM · modelos baixados</div>
+        <table class="hw-table">
+          <thead><tr><th>Método</th><th>Acertos</th><th>Tempo est.</th><th>Disco</th><th>Tipo</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>OwlViT (Google)</td><td class="acc acc-unk">?/5</td><td>~5 s CPU</td><td>340 MB</td><td>Zero-shot Detection</td><td class="status-pending">⏳ Em teste</td></tr>
+            <tr><td>CLIP Counting (OpenAI)</td><td class="acc acc-unk">?/5</td><td>~2 s CPU</td><td>300 MB</td><td>Text-Similarity</td><td class="status-pending">⏳ Em teste</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tier-section">
+        <div class="tier-header tier-4">☁️ Tier 4 — Cloud API</div>
+        <div class="tier-desc">Sem GPU local · requer internet · latência de rede</div>
+        <table class="hw-table">
+          <thead><tr><th>Método</th><th>Acertos</th><th>MAE</th><th>Latência</th><th>Custo</th><th>Offline</th></tr></thead>
+          <tbody>
+            <tr class="winner"><td>VLM Claude Sonnet ⭐</td><td class="acc">5/5*</td><td>0.00*</td><td>~1 s</td><td>~$0.003/img</td><td class="acc-bad">✗ Não</td></tr>
+          </tbody>
+        </table>
+        <p class="table-note">* Resultado esperado baseado em testes prévios com API key disponível.</p>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-title">💡 Insight Principal</div>
+        <p>
+          O método <strong>WS Regional Max</strong> (Watershed + Regional Maxima via scipy.maximum_filter)
+          obteve <strong>5/5 imagens corretas</strong> rodando em &lt;10 ms sem GPU e sem modelos pré-treinados.
+          A chave foi substituir o limiar global fixo (60% do máximo) por máximos locais adaptativos —
+          permitindo detectar parafusos sobrepostos cujos picos do distance transform ficam abaixo do limiar global.
+          Isso elimina a necessidade de infraestrutura de GPU para o caso de uso de picking industrial.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>Gabriel Afonso Freitas Aires · CDIA Bootcamp — Residência em IA · 2026</p>
+</footer>
+
+<script src="/static/main.js"></script>
+</body>
+</html>

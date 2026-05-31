@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CDIA — Residência em IA</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="d1">
+
+<!-- ════════════════════════════════════════ HEADER ══════════ -->
+<header>
+  <div class="header-inner">
+
+    <div class="logo">
+      <span class="logo-icon">⚙</span>
+      <div>
+        <div class="logo-title">SCREW COUNTER</div>
+        <div class="logo-sub">CDIA · Residência em IA · 2026</div>
+      </div>
+    </div>
+
+    <!-- Challenge switcher -->
+    <div class="challenge-switcher">
+      <button class="ch-btn active" data-challenge="d1">
+        <span class="ch-emoji">🔩</span>
+        <span class="ch-label">
+          <span class="ch-title">Desafio 1</span>
+          <span class="ch-sub">Parafusos</span>
+        </span>
+      </button>
+      <button class="ch-btn" data-challenge="d2">
+        <span class="ch-emoji">🧱</span>
+        <span class="ch-label">
+          <span class="ch-title">Desafio 2</span>
+          <span class="ch-sub">Trincas</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="header-badges">
+      <span class="badge badge-green">OpenCV</span>
+      <span class="badge badge-blue">YOLOv8</span>
+      <span class="badge badge-red">FastAPI</span>
+      <span class="badge badge-orange">Claude API</span>
+    </div>
+
+  </div>
+</header>
+
+<main>
+
+  <!-- Model status banner (only D2) -->
+  <div id="modelBanner" class="model-banner hidden">…</div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       DESAFIO 1 — Parafusos
+       ══════════════════════════════════════════════════════════ -->
+  <div class="challenge-section active" data-challenge="d1">
+
+    <div class="tab-bar">
+      <button class="tab active" data-tab="single">Análise Individual</button>
+      <button class="tab" data-tab="compare">Comparar Métodos</button>
+      <button class="tab" data-tab="catalog">Catálogo de Hardware</button>
+    </div>
+
+    <!-- ── D1: Análise Individual ── -->
+    <div id="d1-tab-single" class="tab-content active">
+      <div class="panel-grid">
+
+        <div class="panel">
+          <div class="panel-title">📤 Imagem de Parafusos</div>
+          <div class="drop-zone" id="d1DropZone">
+            <div class="drop-placeholder" id="d1DropPlaceholder">
+              <div class="drop-icon">🔩</div>
+              <p>Arraste uma imagem aqui<br>ou <span class="link">clique para selecionar</span></p>
+              <p class="drop-hint">JPG · PNG · WEBP</p>
+            </div>
+            <img id="d1PreviewImg" class="hidden" alt="preview" />
+            <input type="file" id="d1FileInput" accept="image/*" />
+          </div>
+
+          <div class="method-row">
+            <div class="method-group">
+              <label class="form-label">Método</label>
+              <select id="d1MethodSelect" class="select">
+                <optgroup label="📱 Tier 1 — Smartphone / Embarcado">
+                  <option value="WS_RegionalMax" selected>WS Regional Max ⭐ 5/5 · MAE 0.00</option>
+                  <option value="Watershed">Watershed · 4/5 · MAE 0.60</option>
+                  <option value="ConvexDefects">Convex Defects · 3/5 · MAE 0.60</option>
+                  <option value="MSER">MSER · 2/5 · MAE 0.80</option>
+                  <option value="ColorBG_Sub">Color BG Sub · 2/5 · MAE 1.60</option>
+                  <option value="SimpleBlobDet">Simple Blob Det · 1/5 · MAE 2.60</option>
+                  <option value="HoughCircles">Hough Circles · 1/5 · MAE 8.60</option>
+                  <option value="Canny_Contour">Canny Contour · 0/5 · MAE 4.00</option>
+                  <option value="Shi-Tomasi">Shi-Tomasi · 0/5 · MAE 8.80</option>
+                </optgroup>
+                <optgroup label="💻 Tier 2 — CPU / Notebook">
+                  <option value="NCC_Template">NCC Template · 1/5 · MAE 3.40</option>
+                  <option value="SIFT_Template">SIFT Template · 0/5 · MAE 4.80</option>
+                  <option value="MobileNet_CNN">MobileNet CNN · 0/5 · MAE 6.20</option>
+                  <option value="LoG_Blobs">LoG Scale-Space · 0/5 · MAE 5.00</option>
+                  <option value="GrabCut">GrabCut · 0/5 · MAE 4.60</option>
+                </optgroup>
+                <optgroup label="🖥️ Tier 3 — GPU / Servidor">
+                  <option value="CLIP">CLIP Semântico · 2/5 · MAE 3.20</option>
+                  <option value="OwlViT">OwlViT Zero-Shot · 0/5 · MAE 2.40</option>
+                  <option value="FasterRCNN">Faster R-CNN COCO · 0/5 · MAE 4.80</option>
+                </optgroup>
+                <optgroup label="☁️ Tier 4 — Cloud API">
+                  <option value="VLM_Claude">VLM Claude API ⭐ 5/5 · MAE 0.00</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="hw-pill">
+              <span id="d1HwIcon">📱</span>
+              <span id="d1HwLabel">Smartphone</span>
+            </div>
+          </div>
+
+          <div class="hw-bar">
+            <div class="hw-detail"><span class="hw-key">RAM</span><span id="d1HwRam">~50 MB</span></div>
+            <div class="hw-detail"><span class="hw-key">Disco</span><span id="d1HwDisk">0 MB</span></div>
+            <div class="hw-detail"><span class="hw-key">GPU</span><span id="d1HwGpu">✗ Não</span></div>
+            <div class="hw-detail"><span class="hw-key">Offline</span><span id="d1HwOffline">✓</span></div>
+          </div>
+
+          <button id="d1CountBtn" class="btn btn-primary" disabled>
+            <span>⚙</span> Contar Parafusos
+          </button>
+        </div>
+
+        <div class="panel result-panel">
+          <div class="panel-title">📊 Resultado</div>
+          <div class="result-empty" id="d1ResultEmpty">
+            <div class="result-empty-icon">🔩</div>
+            <p>Envie uma imagem para começar</p>
+          </div>
+          <div class="hidden" id="d1ResultContent">
+            <div class="count-display">
+              <div class="count-number" id="d1CountNumber">0</div>
+              <div class="count-unit">parafusos detectados</div>
+            </div>
+            <div class="result-meta">
+              <div class="meta-chip" id="d1MetaMethod">—</div>
+              <div class="meta-chip time-chip" id="d1MetaTime">— ms</div>
+            </div>
+            <div class="annotated-wrap"><img id="d1AnnotatedImg" src="" alt="anotado" /></div>
+            <button class="btn btn-secondary" id="d1DownloadBtn">⬇ Baixar Imagem</button>
+          </div>
+          <div class="loading hidden" id="d1LoadingOverlay">
+            <div class="spinner"></div><p>Processando…</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── D1: Comparar ── -->
+    <div id="d1-tab-compare" class="tab-content hidden">
+      <div class="panel">
+        <div class="panel-title">⚖️ Comparação de Métodos</div>
+        <p class="panel-desc">Tier 1 (Embedded) + Tier 2 CPU rodam em &lt;2s. Tier 3 GPU roda separado (modelos pesados, 5–15s na primeira execução).</p>
+        <div class="compare-upload-row">
+          <div class="drop-zone drop-zone-sm" id="d1DropZoneCompare">
+            <div class="drop-placeholder" id="d1DropPlaceholderCompare">
+              <div class="drop-icon">🔩</div><p>Selecione uma imagem</p>
+            </div>
+            <img id="d1PreviewCompare" class="hidden" alt="" />
+            <input type="file" id="d1FileInputCompare" accept="image/*" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button id="d1CompareBtn" class="btn btn-primary" disabled>
+              <span>⚡</span> T1 + T2 (rápido)
+            </button>
+            <button id="d1CompareGpuBtn" class="btn btn-secondary" disabled style="font-size:.8rem;padding:.45rem 1rem">
+              <span>🖥️</span> T3 GPU (lento)
+            </button>
+          </div>
+        </div>
+        <div class="loading hidden" id="d1CompareLoading">
+          <div class="spinner"></div><p id="d1CompareLoadingMsg">Rodando métodos T1 + T2…</p>
+        </div>
+        <div id="d1CompareGrid" class="compare-grid hidden"></div>
+      </div>
+    </div>
+
+    <!-- ── D1: Catálogo ── -->
+    <div id="d1-tab-catalog" class="tab-content hidden">
+      <div class="panel">
+        <div class="panel-title">🖥️ Benchmark Completo — 18 Métodos · 4 Tiers de Hardware</div>
+        <p class="panel-desc">5 imagens de parafusos · ground truth manual · métricas: acurácia exata, MAE (erro absoluto médio), tempo de inferência.</p>
+
+        <div class="tier-section">
+          <div class="tier-header tier-1">📱 Tier 1 — Smartphone / Embarcado</div>
+          <div class="tier-desc">Sem GPU · offline · &lt;100 MB RAM · &lt;20 ms/img — 9 métodos testados</div>
+          <table class="hw-table">
+            <thead><tr><th>Método</th><th>Acertos</th><th>MAE</th><th>ms/img</th><th>RAM</th><th>Principal limitação</th></tr></thead>
+            <tbody>
+              <tr class="winner"><td>WS Regional Max ⭐</td><td class="acc">5/5</td><td class="acc">0.00</td><td>8</td><td>~2 MB</td><td>—</td></tr>
+              <tr><td>Watershed</td><td class="acc">4/5</td><td class="acc-med">0.60</td><td>7</td><td>~1 MB</td><td>Pilha densa (img5)</td></tr>
+              <tr><td>Convex Defects</td><td class="acc-med">3/5</td><td class="acc-med">0.60</td><td>9</td><td>&lt;1 MB</td><td>Funde parafusos sobrepostos</td></tr>
+              <tr><td>MSER</td><td class="acc-low">2/5</td><td class="acc-low">0.80</td><td>19</td><td>~10 MB</td><td>Regiões fusionadas em pilha</td></tr>
+              <tr><td>Color BG Sub</td><td class="acc-low">2/5</td><td class="acc-low">1.60</td><td>11</td><td>~2 MB</td><td>Sensível à cor de fundo</td></tr>
+              <tr><td>Simple Blob Det</td><td class="acc-bad">1/5</td><td class="acc-bad">2.60</td><td>11</td><td>&lt;1 MB</td><td>Parâmetros fixos, não adaptativos</td></tr>
+              <tr><td>Hough Circles</td><td class="acc-bad">1/5</td><td class="acc-bad">8.60</td><td>7</td><td>~7 MB</td><td>Super-detecta (3× falsos positivos)</td></tr>
+              <tr><td>Canny Contour</td><td class="acc-bad">0/5</td><td class="acc-bad">4.00</td><td>2</td><td>&lt;1 MB</td><td>Bordas fragmentadas, sem objetos fechados</td></tr>
+              <tr><td>Shi-Tomasi</td><td class="acc-bad">0/5</td><td class="acc-bad">8.80</td><td>15</td><td>&lt;1 MB</td><td>Cantos se multiplicam em pilha</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tier-section">
+          <div class="tier-header tier-2">💻 Tier 2 — CPU / Notebook</div>
+          <div class="tier-desc">Sem GPU · offline · &lt;2 GB RAM · 100 ms – 5 s/img — 5 métodos testados</div>
+          <table class="hw-table">
+            <thead><tr><th>Método</th><th>Acertos</th><th>MAE</th><th>ms/img</th><th>RAM</th><th>Principal limitação</th></tr></thead>
+            <tbody>
+              <tr><td>NCC Template</td><td class="acc-bad">1/5</td><td class="acc-bad">3.40</td><td>200</td><td>~80 MB</td><td>Depende de template único (img2)</td></tr>
+              <tr><td>SIFT Template</td><td class="acc-bad">0/5</td><td class="acc-bad">4.80</td><td>76</td><td>~150 MB</td><td>Keypoints sem correspondência cross-context</td></tr>
+              <tr><td>GrabCut</td><td class="acc-bad">0/5</td><td class="acc-bad">4.60</td><td>5272</td><td>~50 MB</td><td>GMM segmenta 1 blob, não conta objetos</td></tr>
+              <tr><td>MobileNet CNN</td><td class="acc-bad">0/5</td><td class="acc-bad">6.20</td><td>302</td><td>~200 MB</td><td>ImageNet ≠ domínio de parafusos industriais</td></tr>
+              <tr><td>LoG Scale-Space</td><td class="acc-bad">0/5</td><td class="acc-bad">5.00</td><td>1928</td><td>~100 MB</td><td>Picos espúrios, 1.9 s/img sem ganho</td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">Nenhum método Tier 2 supera o melhor Tier 1. Custo computacional não traz ganho de acurácia neste domínio.</p>
+        </div>
+
+        <div class="tier-section">
+          <div class="tier-header tier-3">🖥️ Tier 3 — GPU / Servidor</div>
+          <div class="tier-desc">GPU recomendada · offline · &gt;300 MB RAM · modelos pré-treinados — 3 métodos testados</div>
+          <table class="hw-table">
+            <thead><tr><th>Método</th><th>Acertos</th><th>MAE</th><th>ms/img (CPU)</th><th>Disco</th><th>Abordagem</th></tr></thead>
+            <tbody>
+              <tr><td>CLIP ⭐ T3</td><td class="acc-low">2/5</td><td class="acc-bad">3.20</td><td>1110</td><td>300 MB</td><td>Similaridade texto-imagem semântica</td></tr>
+              <tr><td>OwlViT</td><td class="acc-bad">0/5</td><td class="acc-bad">2.40</td><td>1996</td><td>340 MB</td><td>Detecção zero-shot via prompt textual</td></tr>
+              <tr><td>Faster R-CNN (COCO)</td><td class="acc-bad">0/5</td><td class="acc-bad">4.80</td><td>1187</td><td>160 MB</td><td>Vocabulário fechado sem classe 'screw'</td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">Com fine-tuning de 50–200 imagens, OwlViT seria candidato forte. Zero-shot neste domínio específico é insuficiente.</p>
+        </div>
+
+        <div class="tier-section">
+          <div class="tier-header tier-4">☁️ Tier 4 — Cloud API</div>
+          <div class="tier-desc">Requer internet + API key · custo por chamada</div>
+          <table class="hw-table">
+            <thead><tr><th>Método</th><th>Acertos</th><th>MAE</th><th>Latência</th><th>Custo</th><th>Observação</th></tr></thead>
+            <tbody>
+              <tr class="winner"><td>VLM Claude (Opus) ⭐</td><td class="acc">5/5*</td><td class="acc">0.00*</td><td>~1.8 s</td><td>~$0.01/img</td><td>Prompt inclui "including overlapping"</td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">* Confirmado em sessão anterior com ANTHROPIC_API_KEY. Na solução final, o VLM é usado apenas como fallback quando confiança OpenCV &lt; 50% — acionado em 0% dos casos com WS_RegionalMax.</p>
+        </div>
+
+        <div class="insight-box">
+          <div class="insight-title">💡 Por que métodos mais complexos perdem para Watershed Regional Max?</div>
+          <p>
+            O problema específico — parafusos sobrepostos em pilha — é resolvido por <strong>máximos regionais do distance transform</strong>
+            (<code>scipy.ndimage.maximum_filter</code> com footprint 5% da imagem).
+            Cada pico local = 1 semente do Watershed, independente da altura absoluta.
+            Modelos Tier 2 e Tier 3 ativam em features genéricas (texturas, bordas) que não discriminam parafusos individuais.
+            <strong>WS_RegionalMax: 5/5 em 8 ms sem GPU</strong>, empatando com VLM Cloud (1800 ms + custo monetário).
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /challenge-section d1 -->
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       DESAFIO 2 — Trincas
+       ══════════════════════════════════════════════════════════ -->
+  <div class="challenge-section" data-challenge="d2">
+
+    <div class="tab-bar">
+      <button class="tab active" data-tab="single">Análise Individual</button>
+      <button class="tab" data-tab="compare">Comparar Métodos</button>
+      <button class="tab" data-tab="catalog">Benchmark</button>
+    </div>
+
+    <!-- ── D2: Análise Individual ── -->
+    <div id="d2-tab-single" class="tab-content active">
+      <div class="panel-grid">
+
+        <div class="panel">
+          <div class="panel-title">📤 Imagem de Parede</div>
+          <div class="drop-zone" id="d2DropZone">
+            <div class="drop-placeholder" id="d2DropPlaceholder">
+              <div class="drop-icon">🧱</div>
+              <p>Arraste uma imagem aqui<br>ou <span class="link">clique para selecionar</span></p>
+              <p class="drop-hint">JPG · PNG · WEBP</p>
+            </div>
+            <img id="d2PreviewImg" class="hidden" alt="preview" />
+            <input type="file" id="d2FileInput" accept="image/*" />
+          </div>
+
+          <div class="method-row">
+            <div class="method-group">
+              <label class="form-label">Método de Detecção</label>
+              <select id="d2MethodSelect" class="select">
+                <optgroup label="📱 CV Tradicional (sem modelo)">
+                  <option value="Canny+Morph">Canny + Morph — IoU 0.161 ⭐</option>
+                  <option value="Adaptive Thresh">Adaptive Threshold — IoU 0.117</option>
+                  <option value="Sobel+Otsu">Sobel + Otsu — IoU 0.107</option>
+                  <option value="Gabor Filter">Gabor Filter — IoU 0.009</option>
+                </optgroup>
+                <optgroup label="💻 Modelo Fine-tuned (CPU)">
+                  <option value="YOLOv8n-seg" selected>YOLOv8n-seg ⭐ (recomendado)</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="hw-pill">
+              <span id="d2HwIcon">💻</span>
+              <span id="d2HwLabel">Modelo Fine-tuned</span>
+            </div>
+          </div>
+
+          <div class="hw-bar">
+            <div class="hw-detail"><span class="hw-key">RAM</span><span id="d2HwRam">~300 MB</span></div>
+            <div class="hw-detail"><span class="hw-key">Disco</span><span id="d2HwDisk">6 MB</span></div>
+            <div class="hw-detail"><span class="hw-key">GPU</span><span id="d2HwGpu">✗ Não</span></div>
+            <div class="hw-detail"><span class="hw-key">Offline</span><span id="d2HwOffline">✓</span></div>
+          </div>
+
+          <button id="d2DetectBtn" class="btn btn-primary" disabled>
+            <span>⚠</span> Detectar Trincas
+          </button>
+        </div>
+
+        <div class="panel result-panel">
+          <div class="panel-title">📊 Resultado</div>
+          <div class="result-empty" id="d2ResultEmpty">
+            <div class="result-empty-icon">🧱</div>
+            <p>Envie uma imagem de parede para detectar trincas</p>
+          </div>
+          <div class="hidden" id="d2ResultContent">
+            <div class="count-display">
+              <div class="count-number" id="d2CountNumber">0</div>
+              <div class="count-unit">regiões de trinca detectadas</div>
+            </div>
+            <div class="result-meta">
+              <div class="meta-chip" id="d2MetaMethod">—</div>
+              <div class="meta-chip time-chip" id="d2MetaTime">— ms</div>
+            </div>
+            <p class="result-hint" id="d2ResultHint" style="font-size:.78rem;color:var(--text-muted);margin:.4rem 0 .6rem;text-align:center"></p>
+            <div class="annotated-wrap"><img id="d2AnnotatedImg" src="" alt="anotado" /></div>
+            <button class="btn btn-secondary" id="d2DownloadBtn">⬇ Baixar Imagem</button>
+          </div>
+          <div class="loading hidden" id="d2LoadingOverlay">
+            <div class="spinner"></div><p>Detectando trincas…</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── D2: Comparar ── -->
+    <div id="d2-tab-compare" class="tab-content hidden">
+      <div class="panel">
+        <div class="panel-title">⚖️ Comparação de Métodos (Tier 1 + 2)</div>
+        <p class="panel-desc">Roda todos os métodos de detecção de trincas simultaneamente e exibe os resultados lado a lado.</p>
+        <div class="compare-upload-row">
+          <div class="drop-zone drop-zone-sm" id="d2DropZoneCompare">
+            <div class="drop-placeholder" id="d2DropPlaceholderCompare">
+              <div class="drop-icon">🧱</div><p>Selecione uma imagem</p>
+            </div>
+            <img id="d2PreviewCompare" class="hidden" alt="" />
+            <input type="file" id="d2FileInputCompare" accept="image/*" />
+          </div>
+          <button id="d2CompareBtn" class="btn btn-primary" disabled>
+            <span>⚡</span> Comparar Todos
+          </button>
+        </div>
+        <div class="loading hidden" id="d2CompareLoading">
+          <div class="spinner"></div><p>Rodando todos os métodos…</p>
+        </div>
+        <div id="d2CompareGrid" class="compare-grid hidden"></div>
+      </div>
+    </div>
+
+    <!-- ── D2: Benchmark ── -->
+    <div id="d2-tab-catalog" class="tab-content hidden">
+      <div class="panel">
+        <div class="panel-title">📊 Benchmark — Detecção de Trincas</div>
+        <p class="panel-desc">5 métodos avaliados em 30 imagens de validação (311 total). Dataset: 1551 imagens, YOLO segmentation format, 1 classe (crack).</p>
+
+        <div class="tier-section">
+          <div class="tier-header tier-1">📱 CV Tradicional — Sem modelo, sem GPU</div>
+          <div class="tier-desc">Resultados reais em 30 imagens de validação · IoU pixel-level vs máscara GT</div>
+          <table class="hw-table">
+            <thead><tr><th>Método</th><th>Det%</th><th>IoU médio</th><th>ms/img</th><th>RAM</th><th>Técnica</th></tr></thead>
+            <tbody>
+              <tr class="winner"><td>Canny + Morphological ⭐</td><td class="acc">96.7%</td><td class="acc-low">0.161</td><td>~309 ms</td><td>~15 MB</td><td>Edge Detection + Dilation</td></tr>
+              <tr><td>Adaptive Threshold</td><td class="acc">96.7%</td><td class="acc-low">0.117</td><td>~830 ms</td><td>~15 MB</td><td>Gaussian Adaptive Thresh</td></tr>
+              <tr><td>Sobel + Otsu</td><td class="acc">100%</td><td class="acc-bad">0.107</td><td>~192 ms</td><td>~15 MB</td><td>Gradient Magnitude</td></tr>
+              <tr><td>Gabor Filter Bank</td><td class="acc">100%</td><td class="acc-bad">0.009</td><td>~468 ms</td><td>~30 MB</td><td>Texture Filter (4 orientações)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tier-section">
+          <div class="tier-header tier-2">💻 Tier 2 — YOLOv8n-seg Fine-tuned (CPU)</div>
+          <div class="tier-desc">1240 imagens de treino · 14 épocas (4 + retreino 10) · validação oficial em 311 imagens</div>
+          <table class="hw-table">
+            <thead><tr><th>Modelo</th><th>Precision</th><th>Recall</th><th>mAP50 (box)</th><th>mAP50 (seg)</th><th>ms/img</th></tr></thead>
+            <tbody>
+              <tr class="winner"><td>YOLOv8n-seg ⭐ (final)</td><td class="acc">0.756</td><td class="acc-med">0.616</td><td class="acc">0.672</td><td class="acc">0.510</td><td>41 ms</td></tr>
+              <tr style="opacity:.6"><td>YOLOv8n-seg (ep.1, ref.)</td><td>—</td><td>—</td><td class="acc-med">0.374</td><td class="acc-med">0.317</td><td>41 ms</td></tr>
+              <tr style="opacity:.6"><td>Canny + Morph (baseline)</td><td>—</td><td>96.7%</td><td>—</td><td class="acc-bad">0.161</td><td>309 ms</td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">O modelo retorna bounding boxes + máscaras de segmentação: mostra <strong>onde</strong> está a fissura, não apenas se existe. mAP50(seg)=0.510 representa 3.2× de melhora sobre o melhor método tradicional (Canny, IoU=0.161).</p>
+        </div>
+
+        <div class="insight-box">
+          <div class="insight-title">💡 O modelo mostra onde está a fissura — não só se existe</div>
+          <p>
+            Métodos tradicionais respondem "detectado / não detectado" com IoU máximo de <strong>0.161</strong> (Canny).
+            O <strong>YOLOv8n-seg</strong> fine-tuned em 1240 imagens reais de paredes retorna
+            <strong>bounding boxes</strong> delimitando cada fissura e <strong>máscaras de segmentação</strong>
+            com o contorno exato da região afetada — visualizado como overlay azul na imagem.
+            Pipeline completo: YOLO principal → VLM Claude (fallback cloud, confiança &lt; 40%) → Canny (fallback offline).
+            Inferência em <strong>41 ms/img na CPU</strong>, sem GPU.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /challenge-section d2 -->
+
+</main>
+
+<footer>
+  <p>Gabriel Afonso Freitas Aires · CDIA Bootcamp — Residência em IA · 2026</p>
+</footer>
+
+<script src="/static/main.js"></script>
+</body>
+</html>

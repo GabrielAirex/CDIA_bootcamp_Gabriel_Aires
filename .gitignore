@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Dataset grande demais para o GitHub
+desafio2/dataset/
+
+# Dataset sintético (83MB)
+desafio1/benchmark/synthetic_dataset/
+
+# Modelo FasterRCNN (159MB — excede limite do GitHub)
+desafio1/benchmark/models/fasterrcnn_screw.pth
+
+# Treinos YOLO
+desafio2/runs/
