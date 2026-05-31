@@ -582,47 +582,48 @@ def method_mobilenet_salience(image: np.ndarray) -> tuple[int, np.ndarray]:
 def method_vlm_claude(image: np.ndarray) -> tuple[int, np.ndarray]:
     """
     Claude claude-sonnet-4-6 via API para contagem zero-shot.
-    Prompt explícito para incluir sobrepostos e parcialmente ocluídos —
-    exatamente o caso onde CV clássico falha (img5).
     Requer ANTHROPIC_API_KEY no ambiente.
     """
-    try:
-        import anthropic
-        import base64
+    import os
+    import anthropic
+    import base64
 
-        _, buf = cv2.imencode(".jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 90])
-        img_b64 = base64.standard_b64encode(buf.tobytes()).decode("utf-8")
-
-        client = anthropic.Anthropic()
-        msg = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=32,
-            messages=[{
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {"type": "base64", "media_type": "image/jpeg", "data": img_b64},
-                    },
-                    {
-                        "type": "text",
-                        "text": (
-                            "Count every screw and bolt visible in the image, "
-                            "including overlapping or partially hidden ones. "
-                            "Reply with a single integer only."
-                        ),
-                    },
-                ],
-            }],
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise RuntimeError(
+            "ANTHROPIC_API_KEY não encontrada. "
+            "Defina a variável de ambiente antes de usar o método VLM_Claude."
         )
-        count = int(msg.content[0].text.strip().split()[0])
-        ann = image.copy()
-        cv2.putText(ann, f"VLM: {count} screws", (20, 50),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 200, 0), 3)
-        return count, ann
-    except Exception as e:
-        print(f"  [VLM] {e}")
-        return -1, image.copy()
+
+    _, buf = cv2.imencode(".jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 90])
+    img_b64 = base64.standard_b64encode(buf.tobytes()).decode("utf-8")
+
+    client = anthropic.Anthropic()
+    msg = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=32,
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image",
+                    "source": {"type": "base64", "media_type": "image/jpeg", "data": img_b64},
+                },
+                {
+                    "type": "text",
+                    "text": (
+                        "Count every screw and bolt visible in the image, "
+                        "including overlapping or partially hidden ones. "
+                        "Reply with a single integer only."
+                    ),
+                },
+            ],
+        }],
+    )
+    count = int(msg.content[0].text.strip().split()[0])
+    ann = image.copy()
+    cv2.putText(ann, f"VLM: {count} screws", (20, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 200, 0), 3)
+    return count, ann
 
 
 # ─────────────────────────────────────────────

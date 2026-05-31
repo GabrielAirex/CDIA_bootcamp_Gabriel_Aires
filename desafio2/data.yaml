@@ -1,6 +1,6 @@
 names:
 - crack
 nc: 1
-path: /home/airex/Desktop/projects/cdia/desafio2/dataset
+path: dataset
 train: train/images
 val: val/images

@@ -154,49 +154,52 @@ def count_with_opencv(image: np.ndarray) -> tuple[int, float, np.ndarray]:
 
 
 def count_with_vlm(image_path: str) -> tuple[int, float]:
-    """Usa Claude como fallback para contagem zero-shot."""
-    try:
-        import anthropic
-        import base64
+    """Usa Claude como fallback para contagem zero-shot. Requer ANTHROPIC_API_KEY."""
+    import os
+    import anthropic
+    import base64
 
-        with open(image_path, "rb") as f:
-            image_data = base64.standard_b64encode(f.read()).decode("utf-8")
-
-        suffix = Path(image_path).suffix.lower()
-        media_type = "image/jpeg" if suffix in (".jpg", ".jpeg") else "image/png"
-
-        client = anthropic.Anthropic()
-        message = client.messages.create(
-            model="claude-opus-4-7",
-            max_tokens=64,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": media_type,
-                                "data": image_data,
-                            },
-                        },
-                        {
-                            "type": "text",
-                            "text": (
-                                "Count the number of screws (parafusos) in this image. "
-                                "Reply with a single integer only. No explanation."
-                            ),
-                        },
-                    ],
-                }
-            ],
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise RuntimeError(
+            "ANTHROPIC_API_KEY não encontrada. "
+            "Defina a variável de ambiente para usar o fallback VLM."
         )
-        count = int(message.content[0].text.strip())
-        return count, 0.9
-    except Exception as e:
-        print(f"VLM fallback failed: {e}")
-        return -1, 0.0
+
+    with open(image_path, "rb") as f:
+        image_data = base64.standard_b64encode(f.read()).decode("utf-8")
+
+    suffix = Path(image_path).suffix.lower()
+    media_type = "image/jpeg" if suffix in (".jpg", ".jpeg") else "image/png"
+
+    client = anthropic.Anthropic()
+    message = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=64,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image",
+                        "source": {
+                            "type": "base64",
+                            "media_type": media_type,
+                            "data": image_data,
+                        },
+                    },
+                    {
+                        "type": "text",
+                        "text": (
+                            "Count the number of screws (parafusos) in this image. "
+                            "Reply with a single integer only. No explanation."
+                        ),
+                    },
+                ],
+            }
+        ],
+    )
+    count = int(message.content[0].text.strip())
+    return count, 0.9
 
 
 def count_screws(image_path: str, vlm_threshold: float = 0.5) -> CountResult:
