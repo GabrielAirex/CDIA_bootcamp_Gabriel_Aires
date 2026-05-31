@@ -9,7 +9,17 @@ Solução para os dois desafios do processo seletivo para a Residência em IA do
 
 ## Interface
 
-![App — Desafio 1](docs/screenshots/app_d1.png)
+**Desafio 2 — Crack Detector em funcionamento:** YOLOv8n-seg com overlay vermelho (máscara) e bboxes verdes
+
+| Fissura com descascamento · 87ms | Fissura vertical densa |
+|---|---|
+| ![App D2 — resultado 1](docs/screenshots/app_d2_result.png) | ![App D2 — resultado 2](docs/screenshots/app_d2_result2.png) |
+
+**Desafio 1 — Screw Counter em funcionamento:**
+
+| 8 parafusos espalhados · 16.7ms | 4 parafusos no prato · 17.7ms |
+|---|---|
+| ![App D1 — 8 parafusos](docs/screenshots/app_d1_result_8.png) | ![App D1 — 4 parafusos](docs/screenshots/app_d1_result_4.png) |
 
 A aplicação roda em `http://localhost:8080` e permite alternar entre os dois desafios pelo seletor no header.
 

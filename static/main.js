@@ -44,7 +44,7 @@ function updateModelBanner(trained) {
   const b = document.getElementById('modelBanner');
   b.className = 'model-banner' + (currentChallenge === 'd1' ? ' hidden' : trained ? ' ready' : ' missing');
   b.innerHTML = trained
-    ? '✓ YOLOv8n-seg carregado — mAP50(seg) 0.510 · mAP50(box) 0.672 · 41 ms/img CPU · mostra onde está a fissura (bbox + máscara)'
+    ? '✓ Modelo YOLOv8n-seg pronto &nbsp;·&nbsp; mAP50 0.672 &nbsp;·&nbsp; Segmentação 0.510 &nbsp;·&nbsp; 41 ms/img na CPU'
     : '⚠ Modelo não treinado — rode <code>python3 train.py</code> para habilitar YOLOv8n-seg';
 }
 

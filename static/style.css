@@ -111,9 +111,11 @@ main { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
 
 /* ── Model status banner ───────────────────────────────────── */
 .model-banner {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .6rem 1rem; border-radius: var(--radius-sm);
-  margin-bottom: 1.25rem; font-size: .84rem;
+  display: flex; align-items: center; justify-content: center;
+  gap: .5rem; padding: .5rem 1.25rem;
+  border-radius: var(--radius-sm); margin-bottom: 1.25rem;
+  font-size: .82rem; font-weight: 600; letter-spacing: .01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   transition: all .3s;
 }
 .model-banner.ready   { background: rgba(46,204,136,.1); border: 1px solid rgba(46,204,136,.3); color: var(--green); }
