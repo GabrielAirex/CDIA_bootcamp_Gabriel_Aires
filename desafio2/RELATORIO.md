@@ -219,4 +219,24 @@ O YOLOv8n-seg com apenas **4 épocas de fine-tuning** já superou todos os méto
 
 ---
 
+---
+
+## Apêndice — Arquivos não incluídos no .zip
+
+O arquivo `.zip` de submissão tem limite de 10 MB. Os artefatos abaixo foram omitidos por tamanho mas estão disponíveis integralmente no repositório GitHub:
+
+**[github.com/GabrielAirex/CDIA_bootcamp_Gabriel_Aires](https://github.com/GabrielAirex/CDIA_bootcamp_Gabriel_Aires)**
+
+| Artefato | Tamanho | Motivo da omissão | Localização no repo |
+|---|---|---|---|
+| `dataset/` | ~1.9 GB | 1.551 imagens de trincas (Roboflow Universe) | não disponível no repo |
+| `benchmark/output_benchmark/` | ~40 MB | Imagens geradas pelo benchmark (5 métodos × 30 imagens val) | `desafio2/benchmark/output_benchmark/` |
+| `runs/` | ~75 MB | Artefatos de treino YOLO (curvas, batches, confusion matrix) | não disponível no repo |
+| `yolov8n-seg.pt` | ~6.8 MB | Modelo base Ultralytics — baixado automaticamente pelo `train.py` | não disponível no repo |
+| `docs/screenshots/` | ~5.7 MB | Screenshots da interface para documentação | `docs/screenshots/` |
+
+> O dataset de trincas (1.9 GB) e os artefatos de treino (75 MB) não estão no repositório por excederem os limites do GitHub. O dataset pode ser obtido no [Roboflow Universe](https://universe.roboflow.com) buscando por "Crack Detection" com formato YOLO segmentation. O modelo base `yolov8n-seg.pt` é baixado automaticamente ao executar `train.py`.
+
+---
+
 *Relatório gerado em 31/05/2026 | CDIA Bootcamp — Residência em IA*

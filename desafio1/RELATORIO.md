@@ -303,4 +303,23 @@ A principal descoberta do benchmark é que **a escolha do método deve ser orien
 
 ---
 
+---
+
+## Apêndice — Arquivos não incluídos no .zip
+
+O arquivo `.zip` de submissão tem limite de 10 MB. Os artefatos abaixo foram omitidos por tamanho mas estão disponíveis integralmente no repositório GitHub:
+
+**[github.com/GabrielAirex/CDIA_bootcamp_Gabriel_Aires](https://github.com/GabrielAirex/CDIA_bootcamp_Gabriel_Aires)**
+
+| Artefato | Tamanho | Motivo da omissão | Localização no repo |
+|---|---|---|---|
+| `benchmark/output_benchmark/` | ~5.5 MB | Imagens geradas pelo benchmark (24 métodos × 5 imagens) | `desafio1/benchmark/output_benchmark/` |
+| `benchmark/synthetic_dataset/` | ~83 MB | 1.680 imagens sintéticas de parafusos geradas via LLM | `desafio1/benchmark/synthetic_dataset/` |
+| `benchmark/models/fasterrcnn_screw.pth` | ~159 MB | Modelo FasterRCNN fine-tuned (excede limite GitHub sem LFS) | não disponível no repo |
+| `docs/screenshots/` | ~5.7 MB | Screenshots da interface para documentação | `docs/screenshots/` |
+
+> O modelo `fasterrcnn_screw.pth` (159 MB) excede o limite de arquivo do GitHub (100 MB) e não está disponível online. Para reproduzir, execute `desafio1/benchmark/finetune.py` com o dataset Cross-Recessed-Screw.
+
+---
+
 *Relatório gerado em 31/05/2026 | CDIA Bootcamp — Residência em IA*

@@ -194,4 +194,25 @@ python3 post_train.py     # validação + benchmark pós-treino
 
 ---
 
+---
+
+## Arquivos não incluídos no .zip de submissão
+
+O `.zip` de submissão está limitado a **10 MB**. Os artefatos abaixo foram omitidos por tamanho — este repositório é a referência completa.
+
+| Artefato | Tamanho | Disponível aqui? |
+|---|---|---|
+| `desafio1/benchmark/output_benchmark/` | ~5.5 MB | ✅ sim |
+| `docs/screenshots/` | ~5.7 MB | ✅ sim |
+| `desafio1/benchmark/models/fasterrcnn_screw.pth` | ~159 MB | ❌ excede limite GitHub (100 MB) |
+| `desafio1/benchmark/synthetic_dataset/` | ~83 MB | ❌ muito grande |
+| `desafio2/benchmark/output_benchmark/` | ~40 MB | ✅ sim |
+| `desafio2/runs/` | ~75 MB | ❌ muito grande |
+| `desafio2/yolov8n-seg.pt` | ~6.8 MB | ❌ baixado automaticamente pelo `train.py` |
+| `desafio2/dataset/` | ~1.9 GB | ❌ dataset externo (Roboflow Universe) |
+
+Para reproduzir o treinamento completo do D2, baixe o dataset no [Roboflow Universe](https://universe.roboflow.com) (Crack Detection, formato YOLO segmentation) e coloque em `desafio2/dataset/`.
+
+---
+
 *CDIA Bootcamp — Residência em IA · 2026*
